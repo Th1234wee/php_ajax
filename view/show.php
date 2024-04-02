@@ -56,14 +56,40 @@
             //_file = image name
 
             $.ajax({
-                method : post,
+                method : 'POST',
                 url : 'save-image.php',
-                image : formData,
+                data : formData,
                 cache :false,
                 processData :false,
                 contentType : false,
-                success :function(image){
-                    alert(123);
+                success :function(image){ // image = $file
+                    $("#image-choose").attr('src','../image/'+image);
+                    $('#image').val(image);
+                }
+            })
+        })
+        $('#accept_add').on('click',function(){
+            var name  =  $('#name').val();
+            var gender=  $('#gender').val();
+            var image =  $('#image').val();
+            
+
+            $.ajax({
+                method : 'POST',
+                url : 'insert.php',
+                data : {
+                    insert_name : name,
+                    insert_gender :gender,
+                    insert_image : image
+                },
+                cache : false,
+                success : function(response){
+                    if(response == "Ok"){
+                        alert('Success');
+                    }
+                    else{
+                        alert('Error');
+                    }
                 }
             })
         })

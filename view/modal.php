@@ -18,9 +18,11 @@
             <label for="">Profile</label>
             <input type="file" name="_file" id="file" class="form-control">
             <img class="my-3" src="https://placehold.co/100" alt="" id="image-choose">
+            <input type="text" name="" id="image"> 
+            <!-- image =  -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                <button name="accept_add" type="submit" class="btn btn-primary">Confirm Add</button>
+                <button id="accept_add" name="accept_add" type="submit" class="btn btn-primary">Confirm Add</button>
             </div>
         </form>
       </div>
