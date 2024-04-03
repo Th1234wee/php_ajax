@@ -14,7 +14,7 @@
 <body>
     <div class="container d-flex justify-content-between p-4 border border-5 my-4">
         <h3>User Information</h3>
-        <button class="btn btn-outline-primary" id="open_add" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-plus"></i>  Add User</button>
+        <button  class="btn btn-outline-primary" id="open_add" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-plus"></i>  Add User</button>
     </div>
     <div class="container">
         <table class="table table-hover align-middle" style="table-layout: fixed;">
@@ -25,18 +25,28 @@
                 <th>Profile</th>
                 <th>Action</th>
             </tr>
-            <tr>
-                <th>1001</th>
-                <th>Sok</th>
-                <th>Male</th>
-                <th>
-                    <img src="../image/avatar-icon.png" alt="">
-                </th>
-                <th>
-                    <button class="btn btn-outline-warning"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
-                </th>
-            </tr>
+            <?php 
+                include '../shared/connection.php';
+                $sql  =   "SELECT * FROM `user` WHERE 1 ORDER BY `id` DESC";
+                $result_show = $connection -> query($sql);
+                while($row = mysqli_fetch_assoc($result_show)){
+                    echo '
+                        <tr>
+                            <td>'.$row['id'].'</td>
+                            <td>'.$row['name'].'</td>
+                            <td>'.$row['gender'].'</td>
+                            <td>
+                                <img src="../image/'.$row['image'].'" alt="'.$row['image'].'">
+                            </td>
+                            <td>
+                                <button id="open_edit" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    ';
+                }
+            ?>
+            
         </table>
     </div>
     <?php 
@@ -93,6 +103,59 @@
                 }
             })
         })
+        $('#open_add').on('click',function(){
+            $('#accept_add').show();
+            $('#accept_edit').hide();
+        })
+        $('body').on('click','#open_edit',function(){
+            $('#accept_add').hide();
+            $('#accept_edit').show();
+
+            var id      =    $(this).parents('tr').find('td').eq(0).text();
+            var name    =    $(this).parents('tr').find('td').eq(1).text();
+            var gender  =    $(this).parents('tr').find('td').eq(2).text();
+            var image   =    $(this).parents('tr').find('td:eq(3) img').attr('alt');
+            
+            $('#id').val(id);
+            $('#name').val(name);
+            $('#gender').val(gender);
+            $('#image-choose').attr('src','../image/'+image);
+            $('#image').val(image);     
+
+            $('#save-change').on('click',function(){
+                id     = $('#id').val();
+                name   = $('#name').val();
+                gender = $('#gender').val();
+                image  = $('#image').val();
+
+                $.ajax({
+                    method : "POST",
+                    url   : 'update.php',
+                    data   : {
+                        up_id     : id,
+                        up_name   : name,
+                        up_gender : gender ,
+                        up_image  : image 
+                    },
+                    cache : false,
+                    success : function(response){
+                        if(response == "OK"){
+                            alert("OK");
+                        }
+                        else{
+                            alert("Error");
+                        }
+                    }
+                })
+                $('#close').click();
+                $('#close1').click();   
+            })
+            $('#reset').click(function(){
+                $('#close').click();
+                $('#close1').click();
+            })
+        })
+
     })
 </script>
 
