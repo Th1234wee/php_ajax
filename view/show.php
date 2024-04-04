@@ -40,7 +40,7 @@
                             </td>
                             <td>
                                 <button id="open_edit" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pen-to-square"></i></button>
-                                <button class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+                                <button id="accept_delete" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                     ';
@@ -153,6 +153,27 @@
             $('#reset').click(function(){
                 $('#close').click();
                 $('#close1').click();
+            })
+        })
+        $('#accept_delete').on('click',function(){
+            var id = $(this).parents('tr').find('td').eq(0).text();
+            
+
+            $.ajax({
+                method : "post",
+                url : 'delete.php',
+                data : {
+                    delete_id : id
+                },
+                cache : false,
+                success : function(response){
+                    if(response == "OK"){
+                        alert('Success');
+                    }
+                    else{
+                        alert('error');
+                    }
+                }
             })
         })
 
